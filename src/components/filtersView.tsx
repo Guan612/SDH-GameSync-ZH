@@ -97,16 +97,16 @@ export default function filtersView({ description, getFiltersFunction, setFilter
               {showAdvancedOptions && (<>
                 <IconButton
                   icon={FaCopy}
-                  onOKActionDescription="Copy"
+                  onOKActionDescription="复制"
                   onClick={() => {
                     Clipboard.copy(String(props.entry.label));
-                    Toaster.toast("Copied to clipboard");
+                    Toaster.toast("已复制到剪贴板");
                   }}
                 />
                 <IconButton
                   icon={FaPen}
-                  onOKActionDescription="Edit"
-                  onClick={() => textInputPopup("Edit Filter", {
+                  onOKActionDescription="编辑"
+                  onClick={() => textInputPopup("编辑同步规则", {
                     value: String(props.entry.label),
                     set: (value) => filterEntriesEdit(props.entry.position, value),
                   }
@@ -115,7 +115,7 @@ export default function filtersView({ description, getFiltersFunction, setFilter
               </>)}
               <IconButton
                 icon={MdDelete}
-                onOKActionDescription="Remove"
+                onOKActionDescription="移除规则"
                 onClick={() => filterEntriesRemove(props.entry.position)}
               />
             </Row>
@@ -131,11 +131,11 @@ export default function filtersView({ description, getFiltersFunction, setFilter
       }}>
         <Row>
           <FilterPickerButton
-            text="Add Include Filter"
+            text="添加包含规则"
             onConfirm={(path: string) => filterEntriesAppend(`+ ${path}`)}
           />
           <FilterPickerButton
-            text="Add Exclude Filter"
+            text="添加排除规则"
             onConfirm={(path: string) => filterEntriesAppend(`- ${path}`)}
           />
         </Row>
@@ -145,53 +145,53 @@ export default function filtersView({ description, getFiltersFunction, setFilter
               <DialogButton
                 onClick={() => {
                   Clipboard.copy(filterEntriesToArray().join('\n'));
-                  Toaster.toast("Filters copied to clipboard")
+                  Toaster.toast("同步规则已复制到剪贴板")
                 }}
               >
-                Copy Whole Filter
+                复制所有规则
               </DialogButton>
               <DialogButton
                 onClick={() => {
                   const text = Clipboard.paste().trim();
                   if (text) {
                     filterEntriesAppend(text);
-                    Toaster.toast("Filters pasted from clipboard");
+                    Toaster.toast("已从剪贴板追加规则");
                   } else {
-                    Toaster.toast("Clipboard is empty");
+                    Toaster.toast("剪贴板为空");
                   }
                 }}
               >
-                Paste Filter (Append)
+                粘贴规则（追加）
               </DialogButton>
               <DialogButton
                 onClick={() => {
                   const text = Clipboard.paste().trim();
                   if (text) {
                     filterEntriesfromString(text);
-                    Toaster.toast("Filters pasted from clipboard");
+                    Toaster.toast("已用剪贴板内容替换规则");
                   } else {
-                    Toaster.toast("Clipboard is empty");
+                    Toaster.toast("剪贴板为空");
                   }
                 }}
               >
-                Paste Filter (Replace)
+                粘贴规则（替换）
               </DialogButton>
             </Row>
             <Row>
               <DialogButton
                 onClick={() => textInputPopup(
-                  "Add Arbitrary String", {
+                  "添加自定义规则", {
                     value: "",
                     set: (value: string) => filterEntriesAppend(`${value}`),
                   }
                 )}
               >
-                Add Arbitrary Line
+                添加自定义规则
               </DialogButton>
               <DialogButton
                 onClick={() => setFilterEntries([])}
               >
-                Delete All
+                清空规则
               </DialogButton>
             </Row>
           </>
@@ -204,7 +204,7 @@ export default function filtersView({ description, getFiltersFunction, setFilter
             onGamepadFocus={() => saveButtonRef.current && (saveButtonRef.current.style.backgroundColor = "white")}
             onGamepadBlur={() => saveButtonRef.current && (saveButtonRef.current.style.backgroundColor = CSS_STEAM_HIGHLIGHT_COLOR)}
           >
-            Save
+            保存规则
           </DialogButton>
         </Row>
       </div>

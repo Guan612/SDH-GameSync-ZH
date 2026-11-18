@@ -27,7 +27,7 @@ export default definePlugin(() => {
   updateRclone();
 
   return {
-    name: PLUGIN_NAME,
+    name: `${PLUGIN_NAME}（中文）`,
     content: <QuickAccessMenu />,
     icon: <LuArrowDownUp />,
     onDismount() {

@@ -38,7 +38,7 @@ export default function quickAccessMenu() {
     registrations.push(SyncTaskQueue.on(SyncTaskQueue.events.BUSY, (busy: boolean) => {
       setSyncInProgress(busy);
       if ((busy == false) && (syncTriggeredManually == true)) {
-        Toaster.toast("Sync finished");
+        Toaster.toast("同步任务已结束");
         syncTriggeredManually = false;
       }
     }));
@@ -64,7 +64,7 @@ export default function quickAccessMenu() {
         }
       `}
       </style>
-      <PanelSection title="Sync">
+      <PanelSection title="同步">
         <PanelSectionRow>
           <ButtonWithIcon
             icon={<FaSave className={syncInProgress ? "cloudSaveForkRotatingIcon" : ""} />}
@@ -74,13 +74,13 @@ export default function quickAccessMenu() {
               SyncTaskQueue.addSyncTask(sync_cloud_first, GLOBAL_SYNC_APP_ID);
             }}
           >
-            Start Global Sync
+            开始全局同步
           </ButtonWithIcon>
-          {(!globalFilterAvailable) && <small>Please setup the global sync filter via "Global Sync Filters" button first.</small>}
+          {(!globalFilterAvailable) && <small>请先在「全局同步规则」中设置要同步的文件。</small>}
         </PanelSectionRow>
         <PanelSectionRow>
           <ToggleField
-            label="Sync on game start"
+            label="启动游戏时同步"
             checked={Config.get("sync_on_game_start")}
             onChange={(e) => {
               Config.set("sync_on_game_start", e);
@@ -89,7 +89,7 @@ export default function quickAccessMenu() {
         </PanelSectionRow>
         <PanelSectionRow>
           <ToggleField
-            label="Sync on game stop"
+            label="退出游戏时同步"
             checked={Config.get("sync_on_game_stop")}
             onChange={(e) => {
               Config.set("sync_on_game_stop", e);
@@ -98,7 +98,7 @@ export default function quickAccessMenu() {
         </PanelSectionRow>
         <PanelSectionRow>
           <ToggleField
-            label="Sync in offline mode"
+            label="Steam 离线模式下仍尝试同步"
             checked={Config.get("sync_in_offline_mode")}
             onChange={(e) => {
               Config.set("sync_in_offline_mode", e);
@@ -107,10 +107,10 @@ export default function quickAccessMenu() {
         </PanelSectionRow>
       </PanelSection>
 
-      <PanelSection title="Captures">
+      <PanelSection title="截图和录像">
         <PanelSectionRow>
           <ToggleField
-            label="Upload captures"
+            label="上传截图和录像片段"
             checked={Config.get("capture_upload")}
             onChange={e => Config.set("capture_upload", e)}
           />
@@ -118,7 +118,7 @@ export default function quickAccessMenu() {
         {showCaptureOptions && (<>
           <PanelSectionRow>
             <ToggleField
-              label="Delete local copy"
+              label="上传后删除本地副本"
               checked={Config.get("capture_delete_after_upload")}
               onChange={(e) => {
                 Config.set("capture_delete_after_upload", e);
@@ -128,7 +128,7 @@ export default function quickAccessMenu() {
           {showCaptureUploadOnSync && (
             <PanelSectionRow>
               <ToggleField
-                label="Upload on global sync"
+                label="全局同步时上传"
                 checked={Config.get("capture_upload_on_sync")}
                 onChange={(e) => {
                   Config.set("capture_upload_on_sync", e);
@@ -140,32 +140,32 @@ export default function quickAccessMenu() {
             <ButtonWithIcon
               icon={<FaFileUpload />}
               onClick={() =>
-                Popups.multipleTextInputsPopup("Captures Upload Destinations",
+                Popups.multipleTextInputsPopup("截图和录像上传位置",
                   {
-                    "Screenshots": {
+                    "截图": {
                       value: Config.get("capture_upload_destination"),
                       set: (e) => Config.set("capture_upload_destination", e),
                     },
-                    "Clips": {
+                    "录像片段": {
                       value: Config.get("capture_upload_destination_video"),
                       set: (e) => Config.set("capture_upload_destination_video", e),
                     },
                   })}
             >
-              Upload Destinations
+              设置上传位置
             </ButtonWithIcon>
           </PanelSectionRow>
         </>)}
       </PanelSection>
     </>)}
-    <PanelSection title="Configuration">
+    <PanelSection title="设置">
       {hasProvider && (<>
         <PanelSectionRow>
           <ButtonWithIcon
             icon={<BsFillGearFill />}
             onClick={() => SyncTargetConfigPage.enter({ appId: String(GLOBAL_SYNC_APP_ID) })}
           >
-            Global Sync Filters
+            全局同步规则
           </ButtonWithIcon>
         </PanelSectionRow>
         <PanelSectionRow>
@@ -173,7 +173,7 @@ export default function quickAccessMenu() {
             icon={<FaFileAlt />}
             onClick={() => PluginLogsPage.enter({})}
           >
-            Plugin Logs
+            插件日志
           </ButtonWithIcon>
         </PanelSectionRow>
       </>)}
@@ -182,24 +182,24 @@ export default function quickAccessMenu() {
           icon={<MdStorage />}
           onClick={() => ConfigCloudPage.enter({})}
         >
-          Cloud Provider
+          云存储服务
         </ButtonWithIcon>
       </PanelSectionRow>
     </PanelSection>
 
     {hasProvider && (<>
-      <PanelSection title="Advanced Mode">
+      <PanelSection title="高级模式">
         <PanelSectionRow>
           <ToggleField
-            label="Enable"
+            label="启用高级模式"
             checked={Config.get("advanced_mode")}
             onChange={(e) => {
               if (e) {
-                Popups.confirmPopup("Enable Advanced Mode",
+                Popups.confirmPopup("启用高级模式",
                   <span>
-                    Advanced Mode is only for those who understand what they are doing.<br />
-                    <b>Using options within without caution may cause unrecoverable data loss!</b><br /><br />
-                    Click "Confirm" to continue.
+                    仅建议熟悉同步规则的用户启用。<br />
+                    <b>误用这些选项可能造成无法恢复的数据丢失！</b><br /><br />
+                    选择「确认」继续。
                   </span>,
                   () => Config.set("advanced_mode", true));
               } else {
@@ -211,14 +211,14 @@ export default function quickAccessMenu() {
         {showAdvancedOptions && (<>
           <PanelSectionRow>
             <ToggleField
-              label="Strict Game Sync"
+              label="严格游戏同步"
               checked={Config.get("strict_game_sync")}
               onChange={(e) => {
                 if (e) {
-                  Popups.confirmPopup("Enable Strict Game Sync",
+                  Popups.confirmPopup("启用严格游戏同步",
                     <span>
-                      This will change rclone to from "COPY" mode to "SYNC" mode when doing game sync, which allows it to <b>DELETE ANY FILES</b> on destination (local/cloud) to make it match the source (cloud/local).<br /><br />
-                      Click "Confirm" to continue.
+                      游戏同步将从 rclone 的 COPY（复制）模式改为 SYNC（镜像同步）模式。为让目标端与源端一致，<b>可能删除目标端（本地或云端）在源端不存在的文件</b>。<br /><br />
+                      选择「确认」继续。
                     </span>,
                     () => Config.set("strict_game_sync", true))
                 } else {
@@ -231,16 +231,16 @@ export default function quickAccessMenu() {
             <ButtonWithIcon
               icon={<FaCloudArrowUp />}
               onClick={() =>
-                Popups.textInputPopup("Global & Game Sync Root", {
+                Popups.textInputPopup("全局和游戏同步的本地根目录", {
                   value: Config.get("sync_root"),
                   set: (e) => {
                     if (e != Config.get("sync_root")) {
                       if (Config.get("strict_game_sync")) {
-                        Popups.confirmPopup("Modify Sync Root",
+                        Popups.confirmPopup("更改本地同步根目录",
                           <span>
-                            You are modifying the sync root with "Strict Game Sync" enabled.<br />
-                            Please make sure all the data are aligned in local and cloud, otherwise data may be lost or even <b>fully deleted</b>!<br /><br />
-                            Click "Confirm" to continue.
+                            当前已启用「严格游戏同步」。<br />
+                            请先确认本地和云端数据一致，否则数据可能丢失，甚至<b>被全部删除</b>！<br /><br />
+                            选择「确认」继续。
                           </span>,
                           () => Config.set("sync_root", e)
                         )
@@ -252,23 +252,23 @@ export default function quickAccessMenu() {
                 })
               }
             >
-              Set Sync Root
+              设置本地同步根目录
             </ButtonWithIcon>
           </PanelSectionRow>
           <PanelSectionRow>
             <ButtonWithIcon
               icon={<FaCloudArrowDown />}
               onClick={() =>
-                Popups.textInputPopup("Global & Game Sync Destination", {
+                Popups.textInputPopup("全局和游戏同步的云端目录", {
                   value: Config.get("sync_destination"),
                   set: (e) => {
                     if (e != Config.get("sync_destination")) {
                       if (Config.get("strict_game_sync")) {
-                        Popups.confirmPopup("Modify Sync Destination",
+                        Popups.confirmPopup("更改云端同步目录",
                           <span>
-                            You are modifying the sync destination with "Strict Game Sync" enabled.<br />
-                            Please make sure all the data are aligned in local and cloud, otherwise data may be lost or even <b>fully deleted</b>!<br /><br />
-                            Click "Confirm" to continue.
+                            当前已启用「严格游戏同步」。<br />
+                            请先确认本地和云端数据一致，否则数据可能丢失，甚至<b>被全部删除</b>！<br /><br />
+                            选择「确认」继续。
                           </span>,
                           async () => {
                             Config.set("sync_destination", e);
@@ -283,7 +283,7 @@ export default function quickAccessMenu() {
                 })
               }
             >
-              Set Sync Destination
+              设置云端同步目录
             </ButtonWithIcon>
           </PanelSectionRow>
           <PanelSectionRow>
@@ -291,7 +291,7 @@ export default function quickAccessMenu() {
               icon={<FaArrowCircleUp />}
               onClick={() => updateRclone(true)}
             >
-              Update Rclone
+              更新 rclone
             </ButtonWithIcon>
           </PanelSectionRow>
         </>)}

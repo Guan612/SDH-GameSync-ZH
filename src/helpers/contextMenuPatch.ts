@@ -27,7 +27,7 @@ const spliceArtworkItem = (children: any[], appid: number) => {
       onSelected: () => {
         SyncTargetConfigPage.enter({ appId: String(appid) });
       },
-      children: "Sync Logs & Filters"
+      children: "同步日志与规则"
     })
   ));
 };

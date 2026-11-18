@@ -49,3 +49,7 @@ backend/out
 # Ignore decky CLI for building plugins
 /out
 /cli
+
+# Local Chinese release and validation artifacts
+/release/
+/.test-artifacts/

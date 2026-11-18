@@ -5,9 +5,9 @@ import Logger from "./logger";
 
 export function getAppName(appId: number): string {
   if (appId == GLOBAL_SYNC_APP_ID) {
-    return "global"
+    return "全局同步"
   } else if (appId == SHARED_FILTER_APP_ID) {
-    return "shared"
+    return "共享规则"
   } else {
     return String(window.appStore.GetAppOverviewByAppID(appId)?.display_name);
   }
@@ -19,8 +19,8 @@ export function reduceSlashes(input: string): string {
 
 export function updateRclone(toast: boolean = false) {
   update_rclone()
-    .then(() => toast && Toaster.toast("Rclone is now the latest"))
-    .catch(() => Toaster.toast("Error updating rclone"));
+    .then(() => toast && Toaster.toast("rclone 已更新至最新版本"))
+    .catch(() => Toaster.toast("更新 rclone 失败"));
 }
 
 export function retry(handler: () => void, delayMs: number) {

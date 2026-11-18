@@ -54,7 +54,7 @@ class SyncTaskQueue extends Observable {
               Logger.info(`Sync for "${appId}" finished`);
             } else {
               Logger.error(`Sync for for ${appId} failed with exit code ${exitCode}`);
-              Toaster.toast(`Sync failed, click to see the errors`, 5000, () => {
+              Toaster.toast(`同步失败，点击查看错误`, 5000, () => {
                 this.emit(this.events.FAIL_TOAST_CLICK, appId)
               });
             }
@@ -73,7 +73,7 @@ class SyncTaskQueue extends Observable {
           resume_process(pId);
         }
         Logger.warning(`Skipping download sync for ${appId} due to missing upload sync`);
-        Toaster.toast("Skipping download sync");
+        Toaster.toast("上次未完成上传，已跳过下载以保护本地存档");
       }
     }
 
@@ -92,7 +92,7 @@ class SyncTaskQueue extends Observable {
       let exitCode = await copy_capture(await SteamClient.Screenshots.GetLocalScreenshotPath(appId, screenshotIndex));
       if (exitCode != 0) {
         Logger.error("Upload screenshot", screenshot ,"failure:", exitCode);
-        Toaster.toast("Failed to upload screenshot");
+        Toaster.toast("上传截图失败");
         return exitCode;
       }
 
@@ -129,7 +129,7 @@ class SyncTaskQueue extends Observable {
       let exitCode = await copy_clip(clipPath);
       if (exitCode != 0) {
         Logger.error("Upload clip", clip, "failure:", exitCode);
-        Toaster.toast("Failed to upload clip");
+        Toaster.toast("上传录像片段失败");
         return exitCode;
       }
 

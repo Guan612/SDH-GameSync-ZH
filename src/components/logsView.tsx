@@ -30,7 +30,7 @@ export default function LogsView({ title, getLog, children }: PropsWithChildren<
         {children}
         <IconButton
           icon={IoMdRefresh}
-          onOKActionDescription="Refresh logs"
+          onOKActionDescription="刷新日志"
           onClick={() => getLog().then(e => setLogContent(e))}
         />
       </>}

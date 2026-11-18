@@ -22,13 +22,13 @@ export default function filterPickerButton({ text, onConfirm }: FilterPickerButt
     const fullPath = path + postfix;
 
     if (!path.startsWith(Config.get("sync_root"))) {
-      Toaster.toast("Invalid, path not in sync root");
+      Toaster.toast("所选路径不在本地同步根目录内");
     } else if (path === "/") {
       confirmPopup(
-        <b>ARE YOU SURE?</b>,
+        <b>确定添加系统根目录？</b>,
         <span>
-          It will add the root directory to the filter list. <b>Syncing with such a filter makes rclone try to upload or even delete the whole file system.</b><br /><br />
-          If you are 100% sure what you are doing, click "Confirm" to continue.
+          这会把系统根目录加入规则。<b>使用这条规则同步时，rclone 可能尝试上传甚至删除整个文件系统。</b><br /><br />
+          仅在确认后果的情况下选择「确认」。
         </span>,
         () => onConfirm(fullPath)
       );
@@ -36,8 +36,8 @@ export default function filterPickerButton({ text, onConfirm }: FilterPickerButt
       test_syncpath(fullPath).then(e => confirmPopup(
         text,
         <span>
-          Path <i>{fullPath}</i> matches <b>{e >= 0 ? e : "tooooooo many"}</b> file(s).<br /><br />
-          Click "Confirm" to continue.
+          路径 <i>{fullPath}</i> 匹配 <b>{e >= 0 ? `${e} 个文件` : "过多文件"}</b>。<br /><br />
+          选择「确认」继续。
         </span>,
         () => onConfirm("/" + reduceSlashes(fullPath.slice(Config.get("sync_root").length)))
       ))
@@ -47,14 +47,14 @@ export default function filterPickerButton({ text, onConfirm }: FilterPickerButt
   return (
     <DialogButton
       onClick={() => showContextMenu(
-        <Menu label="Filter Type">
+        <Menu label="选择路径类型">
           <MenuItem
             onSelected={() =>
               openFilePicker(FileSelectionType.FILE, Config.get("sync_root"), true)
                 .then(e => onFilePicked(e.path, PathPostfix.FILE))
             }
           >
-            File
+            文件
           </MenuItem>
           <MenuItem
             onSelected={() =>
@@ -62,7 +62,7 @@ export default function filterPickerButton({ text, onConfirm }: FilterPickerButt
                 .then((e) => onFilePicked(e.path, PathPostfix.FOLDER))
             }
           >
-            Folder
+            文件夹（含子文件夹）
           </MenuItem>
           <MenuItem
             onSelected={() =>
@@ -70,7 +70,7 @@ export default function filterPickerButton({ text, onConfirm }: FilterPickerButt
                 .then((e) => onFilePicked(e.path, PathPostfix.FOLDER_NORECURSE))
             }
           >
-            Folder (without Subfolders)
+            文件夹（不含子文件夹）
           </MenuItem>
         </Menu>
       )}

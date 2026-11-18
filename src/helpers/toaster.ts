@@ -23,7 +23,7 @@ export function toast(
   clickAction = () => { }
 ) {
   toaster.toast({
-    title: PLUGIN_NAME,
+    title: `${PLUGIN_NAME}（中文）`,
     body: msg,
     duration: ms,
     logo: ico,

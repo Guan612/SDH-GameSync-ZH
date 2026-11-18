@@ -1,3 +1,15 @@
+# SDH-GameSync 简体中文版
+
+本仓库基于上游 v1.1.5（`891f5b1`）进行简体中文汉化，非上游官方版本。插件标识、配置格式和同步逻辑保持不变。
+
+**[中文安装、WebDAV 配置与使用说明 → README.zh-CN.md](README.zh-CN.md)**
+
+本地验证：10 项模拟测试通过、TypeScript 项目类型检查通过、Rollup 构建及 ZIP 完整性检查通过。尚未在 SteamOS/DroidDeck 真机或真实 WebDAV 上完成端到端验收。
+
+以下保留上游英文说明。
+
+---
+
 # SDH-GameSync
 
 It is a fork of [Decky Cloud Save](https://github.com/GedasFX/decky-cloud-save) that majorly aims for the implementation of "per-game sync".

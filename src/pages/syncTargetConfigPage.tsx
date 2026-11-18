@@ -39,7 +39,7 @@ class SyncTargetConfigPage extends RoutePage<SyncTargetConfigPageParams> {
     const appId = Number(useParams<SyncTargetConfigPageParams>().appId);
     if (isNaN(appId)) {
       Logger.error(`Invalid appId for sync target config page: ${useParams<SyncTargetConfigPageParams>().appId}`);
-      Toaster.toast("Invalid appId for sync target config page");
+      Toaster.toast("无法打开同步设置：游戏 ID 无效");
       Navigation.NavigateBack();
       return;
     }
@@ -54,17 +54,17 @@ class SyncTargetConfigPage extends RoutePage<SyncTargetConfigPageParams> {
       registrations.push(SyncFilters.on(SyncFilters.events.SET, (appId: number) => {
         if ((appId > GLOBAL_SYNC_APP_ID) && Config.get("strict_game_sync")) {
           confirmPopup(
-            "Filter Saved",
+            "同步规则已保存",
             <span>
-              Since you have enabled Strict Game Sync, modifying the filter may cause the next download sync (on game start) to delete some data. To avoid that, it is highly recommended to trigger an upload sync (on game stop) right now to get data into sync.<br /><br />
-              Do you want to trigger an upload sync right now?
+              当前已启用「严格游戏同步」。修改规则后，下次启动游戏并下载存档时可能删除部分本地数据。为避免这种情况，建议现在先将本地文件上传到云端。<br /><br />
+              现在上传吗？
             </span>,
             () => SyncTaskQueue.addSyncTask(sync_local_first, appId),
-            "Sync Now",
-            "Skip"
+            "立即上传",
+            "跳过"
           )
         } else {
-          Toaster.toast("Filter Saved");
+          Toaster.toast("同步规则已保存");
         }
       }))
 
@@ -74,7 +74,7 @@ class SyncTargetConfigPage extends RoutePage<SyncTargetConfigPageParams> {
     return <SidebarNavigation
       pages={[
         {
-          title: "Sync Logs",
+          title: "同步日志",
           // icon: <FaFileAlt />,
           visible: true,
           content:
@@ -85,46 +85,46 @@ class SyncTargetConfigPage extends RoutePage<SyncTargetConfigPageParams> {
                 <>
                   <IconButton
                     icon={IoMdUnlock}
-                    onOKActionDescription="Delete Lock Files"
+                    onOKActionDescription="删除锁文件"
                     disabled={syncInProgress}
                     onClick={() => confirmPopup(
-                      "Delete Lock Files",
+                      "删除锁文件",
                       <span>
-                        Delete lock files when the prior sync is interrupted without proper cleanup.<br /><br />
-                        Click "Confirm" to continue.
+                        仅在上次同步异常中断并留下锁文件时使用。请先确认没有同步任务正在运行。<br /><br />
+                        选择「确认」继续。
                       </span>,
                       () => {
                         delete_lock_files().then(() => {
-                          Toaster.toast("Lock files deleted");
+                          Toaster.toast("锁文件已删除");
                         }).catch((e) => {
                           Logger.error(`Failed to delete lock files: ${e}`);
-                          Toaster.toast("Failed to delete lock files");
+                          Toaster.toast("删除锁文件失败");
                         });
                       }
                     )}>
                   </IconButton>
                   <IconButton
                     icon={IoArrowUpCircle}
-                    onOKActionDescription="Resync (Local First)"
+                    onOKActionDescription="重新同步（本地优先）"
                     disabled={syncInProgress}
                     onClick={() => confirmPopup(
-                      "Resync (Local First)",
+                      "重新同步（本地优先）",
                       <span>
-                        Starting resync, this may take some time.<br /><br />
-                        Click "Confirm" to continue.
+                        将重新建立同步基准，冲突时以本地版本为准。建议先备份，这可能需要一段时间。<br /><br />
+                        选择「确认」继续。
                       </span>,
                       () => SyncTaskQueue.addSyncTask(_ => resync_local_first(), GLOBAL_SYNC_APP_ID)
                     )}>
                   </IconButton>
                   <IconButton
                     icon={IoArrowDownCircle}
-                    onOKActionDescription="Resync (Cloud First)"
+                    onOKActionDescription="重新同步（云端优先）"
                     disabled={syncInProgress}
                     onClick={() => confirmPopup(
-                      "Resync (Cloud First)",
+                      "重新同步（云端优先）",
                       <span>
-                        Starting resync, this may take some time.<br /><br />
-                        Click "Confirm" to continue.
+                        将重新建立同步基准，冲突时以云端版本为准。建议先备份，这可能需要一段时间。<br /><br />
+                        选择「确认」继续。
                       </span>,
                       () => SyncTaskQueue.addSyncTask(_ => resync_cloud_first(), GLOBAL_SYNC_APP_ID)
                     )}>
@@ -134,34 +134,34 @@ class SyncTargetConfigPage extends RoutePage<SyncTargetConfigPageParams> {
         },
         "separator",
         {
-          title: "Target Filter",
+          title: "专用同步规则",
           visible: true,
           content:
             <FiltersView
-              description={<>Filters specific for <i>{appName}</i> sync. It will be used together with the shared filter, but has a lower priority.</>}
+              description={<>仅用于「<i>{appName}</i>」的规则，与共享规则一起生效，优先级低于共享规则。</>}
               getFiltersFunction={() => SyncFilters.get(appId)}
               setFiltersFunction={(filters) => SyncFilters.set(appId, filters)}
             >
               <IconButton
                 icon={FaCloudArrowUp}
-                onOKActionDescription={`Sync Now (${(appId == GLOBAL_SYNC_APP_ID) ? "Local First" : "Upload to Cloud"})`}
+                onOKActionDescription={(appId == GLOBAL_SYNC_APP_ID) ? "立即同步（本地优先）" : "立即上传到云端"}
                 disabled={syncInProgress}
                 onClick={() => SyncTaskQueue.addSyncTask(sync_local_first, appId)}>
               </IconButton>
               <IconButton
                 icon={FaCloudArrowDown}
-                onOKActionDescription={`Sync Now (${(appId == GLOBAL_SYNC_APP_ID) ? "Cloud First" : "Download to Local"})`}
+                onOKActionDescription={(appId == GLOBAL_SYNC_APP_ID) ? "立即同步（云端优先）" : "立即下载到本地"}
                 disabled={syncInProgress}
                 onClick={() => SyncTaskQueue.addSyncTask(sync_cloud_first, appId)}>
               </IconButton>
             </FiltersView>
         },
         {
-          title: "Shared Filter",
+          title: "共享同步规则",
           visible: true,
           content:
             <SharedFiltersView
-              description="Filters that's shared among all syncs. It will be used together with the target filter, but has a higher priority."
+              description="适用于所有同步任务的规则，与专用规则一起生效，优先级高于专用规则。"
             />
         },
       ]}

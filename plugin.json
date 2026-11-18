@@ -5,7 +5,7 @@
   "flags": [],
   "publish": {
     "tags": ["backup", "cloud", "rclone"],
-    "description": "A fork of Decky Cloud Save that manages cloud saves and mods for games",
+    "description": "SDH-GameSync 简体中文版：游戏启动前下载、退出后上传云端存档。保留上游插件标识和同步逻辑。",
     "image": "https://opengraph.githubassets.com/0/AkazaRenn/SDH-GameSync"
   }
 }

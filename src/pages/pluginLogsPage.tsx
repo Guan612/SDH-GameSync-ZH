@@ -8,7 +8,7 @@ class PluginLogsPage extends RoutePage {
 
   render(): ReactNode {
     return <LogsView
-      title="Plugin Logs"
+      title="插件日志"
       getLog={get_plugin_log}
     />;
   }

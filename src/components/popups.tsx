@@ -12,6 +12,8 @@ export function textInputPopup(title: ReactNode, data: textInputData) {
   showModal(
     <ConfirmModal
       strTitle={title}
+      strOKButtonText="确认"
+      strCancelButtonText="取消"
       onOK={() => data.set(draft)}>
       <TextField
         defaultValue={draft}
@@ -30,6 +32,8 @@ export function multipleTextInputsPopup(title: ReactNode, data: Record<string, t
   showModal(
     <ConfirmModal
       strTitle={title}
+      strOKButtonText="确认"
+      strCancelButtonText="取消"
       onOK={() => {
         for (const [label, text] of Object.entries(draft)) {
           data[label]?.set(text);
@@ -48,7 +52,7 @@ export function multipleTextInputsPopup(title: ReactNode, data: Record<string, t
   );
 }
 
-export function confirmPopup(title: ReactNode, text: ReactNode, onOK?: () => void, okText?: string, cancelText?: string) {
+export function confirmPopup(title: ReactNode, text: ReactNode, onOK?: () => void, okText = "确认", cancelText = "取消") {
   showModal(
     <ConfirmModal
       strTitle={title}

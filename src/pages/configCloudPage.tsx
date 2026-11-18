@@ -17,11 +17,10 @@ async function openConfig(cloud: "onedrive" | "drive" | "dropbox") {
       await sleep(500);
       if (await spawn_probe() !== null) {
         confirmPopup(
-          "Create cloud folder for sync?",
+          "创建云端同步文件夹？",
           <p>
-            If you have successfully configured the cloud provider, now it's time to create the destination folder <i>{Config.get("sync_destination")}</i> in the cloud for sync.<br /><br />
-            To trigger that, click "Confirm".<br />
-            If you have other plans, feel free to dismiss it by clicking "Cancel".
+            如果已成功配置云存储，接下来可以在云端创建同步目录 <i>{Config.get("sync_destination")}</i>。<br /><br />
+            选择「确认」创建，或选择「取消」跳过。
           </p>,
           create_cloud_destination
         );
@@ -45,8 +44,10 @@ async function getCloudBackend(): Promise<string> {
       return "Google Drive";
     case "dropbox":
       return "Dropbox";
+    case "webdav":
+      return "WebDAV";
     default:
-      return "Other: " + cloudType;
+      return "其他：" + cloudType;
   }
 }
 
@@ -61,18 +62,18 @@ class ConfigCloudPage extends RoutePage {
         if (cloud) {
           setProvider(`☁️ ${cloud} ☁️`);
         } else {
-          setProvider("❌ N/A ❌");
+          setProvider("未配置");
         }
       })
     }, []);
 
     return (
-      <Container title="Configure Cloud Storage Provider">
+      <Container title="配置云存储服务">
         <PanelSection>
-          <strong>Currently using: {provider}</strong>
+          <strong>当前使用：{provider}</strong>
         </PanelSection>
         <PanelSection>
-          <small>Click one of the providers below to configure the backup destination</small>
+          <small>选择服务来配置云端存档位置。</small>
           <PanelSectionRow>
             <ButtonItem onClick={() => openConfig("onedrive")} icon={<ImOnedrive />} label="OneDrive">
               <BsGearFill />
@@ -82,7 +83,7 @@ class ConfigCloudPage extends RoutePage {
             <ButtonItem
               onClick={() => openConfig("drive")}
               icon={<ImGoogleDrive />}
-              label="Google Drive (may not work if Google does not trust the Steam Browser)"
+              label="Google Drive（Steam 浏览器可能无法完成 Google 授权）"
             >
               <BsGearFill />
             </ButtonItem>
@@ -95,15 +96,14 @@ class ConfigCloudPage extends RoutePage {
           <PanelSectionRow>
             <ButtonItem
               onClick={() =>
-                confirmPopup("Adding Other Providers",
+                confirmPopup("配置 WebDAV 或其他服务",
                   <span style={{ whiteSpace: "pre-wrap" }}>
-                    In addition to the providers listed above, others can also be configured. Unfortunately, setup for them can only be done in desktop mode.<br />
-                    Please refer to rclone config documents (<a href="https://rclone.org/commands/rclone_config_create/">https://rclone.org/commands/rclone_config_create/</a>) for more information.<br />
-                    Use "cloud" for remote name if you are doing it.
+                    WebDAV 等其他服务需要在桌面模式下用 rclone 配置，不能在此处直接输入账号。<br />
+                    请使用本插件的 rclone 配置文件，并将远端名称设为 <code>cloud</code>。详见<a href="https://rclone.org/webdav/">rclone 的 WebDAV 文档</a>。
                   </span>
                 )}
               icon={<ImHome />}
-              label="Other (Advanced)"
+              label="WebDAV / 其他服务（桌面配置）"
             >
               <BsPatchQuestionFill />
             </ButtonItem>
