@@ -76,7 +76,7 @@ test('plugin identity and package compatibility are retained', () => {
   const old = JSON.parse(baseline('plugin.json'));
   for (const key of ['name', 'author', 'api_version', 'flags']) assert.deepEqual(plugin[key], old[key]);
   const pkg = JSON.parse(read('package.json'));
-  assert.equal(pkg.version, '1.1.5-zh.1');
+  assert.equal(pkg.version, '1.1.5-zh.2');
   assert.deepEqual(pkg.dependencies, JSON.parse(baseline('package.json')).dependencies);
   assert.match(read('src/index.tsx'), /name: `\$\{PLUGIN_NAME\}（中文）`/u);
 });

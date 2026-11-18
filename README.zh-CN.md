@@ -1,6 +1,12 @@
 # SDH-GameSync 简体中文版
 
-基于 [AkazaRenn/SDH-GameSync](https://github.com/AkazaRenn/SDH-GameSync) v1.1.5（提交 `891f5b1`）的本地汉化版，版本号 `1.1.5-zh.1`。原作者、BSD-3-Clause 许可证和原版英文说明均保留。这不是上游官方中文版。
+基于 [AkazaRenn/SDH-GameSync](https://github.com/AkazaRenn/SDH-GameSync) v1.1.5（提交 `891f5b1`）的本地汉化版，版本号 `1.1.5-zh.2`。原作者、BSD-3-Clause 许可证和原版英文说明均保留。这不是上游官方中文版。
+
+## 1.1.5-zh.2 界面修复
+
+云服务设置页现在预留 Steam 顶栏/底栏空间，并使用独立可滚动内容区，避免第四个选项被底栏遮住。键盘聚焦控件时会滚动到可见区域；不改侧栏、快捷面板或同步行为。修复已单独提交上游 [PR #30](https://github.com/AkazaRenn/SDH-GameSync/pull/30)，尚未合并。
+
+本地 13 项测试、类型检查与构建通过；模拟 Decky 控件/Steam 顶底栏的真实浏览器布局检查覆盖 5 种尺寸，滚轮、键盘聚焦和触摸滚动通过。**这不是 Steam/DroidDeck 真机验收，真实手柄焦点导航仍待确认。**
 
 ## 改动范围
 
@@ -14,7 +20,7 @@
 
 1. 在原版插件中先关闭自动同步，正常退出游戏，并等待已有同步任务结束。
 2. 使用文件管理器备份已有存档，以及本机 `homebrew/settings/SDH-GameSync` 目录。若实际插件目录名不同，请以本机为准；备份含 rclone 凭据，不要上传给他人。
-3. 打开 Decky 设置，启用开发者选项，通过「从 ZIP 安装」或「Install Plugin from ZIP」选择 `release/SDH-GameSync-1.1.5-zh.1.zip`。具体选项名称随 Decky 版本不同。
+3. 打开 Decky 设置，启用开发者选项，通过「从 ZIP 安装」或「Install Plugin from ZIP」选择 `release/SDH-GameSync-1.1.5-zh.2.zip`。具体选项名称随 Decky 版本不同。
 4. 这是原插件的替换版，不是应与原版同时启用的第二个同步器。安装后确认只有一个 Game Sync；若 Decky 没有替换原插件，先停止，不要启用两份。
 5. 检查原云服务、目录和规则是否保留，拿一款已备份的游戏手动测试，再启用启动/退出自动同步。
 
@@ -72,7 +78,7 @@ pnpm typecheck
 pnpm package
 ```
 
-安装包在 `release/SDH-GameSync-1.1.5-zh.1.zip`。打包脚本只收集发布文件，不包含 `.git`、`node_modules`、凭据或本地配置。包内顶层目录仍为 `SDH-GameSync`，默认配置位于包根目录，与上游 ZIP 一致。
+安装包在 `release/SDH-GameSync-1.1.5-zh.2.zip`。打包脚本只收集发布文件，不包含 `.git`、`node_modules`、凭据或本地配置。包内顶层目录仍为 `SDH-GameSync`，默认配置位于包根目录，与上游 ZIP 一致。
 
 上游 `src/json/*.json` 是符号链接；Windows Git 需启用 `core.symlinks` 并正确检出这两个文件，否则 TypeScript 会把链接目标文本误读成 JSON。不要提交用来替代链接的配置副本。
 
